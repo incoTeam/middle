@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/multi-module.iml" filepath="$PROJECT_DIR$/.idea/modules/multi-module.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/backend-module/multi-module.backend-module.iml" filepath="$PROJECT_DIR$/.idea/modules/backend-module/multi-module.backend-module.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/backend-module/multi-module.backend-module.main.iml" filepath="$PROJECT_DIR$/.idea/modules/backend-module/multi-module.backend-module.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/backend-module/multi-module.backend-module.test.iml" filepath="$PROJECT_DIR$/.idea/modules/backend-module/multi-module.backend-module.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/multi-module.main.iml" filepath="$PROJECT_DIR$/.idea/modules/multi-module.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/multi-module.test.iml" filepath="$PROJECT_DIR$/.idea/modules/multi-module.test.iml" />
+    </modules>
+  </component>
+</project>

@@ -1,0 +1,5 @@
+rootProject.name = 'multi-module'
+include(":backend-module")
+project(':backend-module').projectDir = file('backend-module')
+//include(':backend-module')
+//project(":backend-module").projectDir = file("backend-module")
