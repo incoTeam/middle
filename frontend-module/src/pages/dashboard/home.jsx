@@ -11,7 +11,7 @@ import {
   MenuItem,
   Avatar,
   Tooltip,
-  Progress,
+  Progress, TabsHeader, Tabs, Tab,
 } from "@material-tailwind/react";
 import {
   EllipsisVerticalIcon,
@@ -26,7 +26,7 @@ import {
   ordersOverviewData,
 } from "@/data";
 import { CheckCircleIcon, ClockIcon } from "@heroicons/react/24/solid";
-import KakaoMap from "@/widgets/map/kakao-map";
+import {KakaoMapMain} from "@/widgets/map";
 
 export function Home() {
   return (
@@ -252,25 +252,7 @@ export function Home() {
           </CardBody>
         </Card>
       </div>
-      <div className="mb-4 grid grid-cols-1 gap-6 xl:grid-cols-3">
-          <Card className="overflow-hidden xl:col-span-3 border border-blue-gra-100 shadow-sm">
-            <CardHeader
-              floated={false}
-              shadow={false}
-              color="transparent"
-              className="m-0 flex items-center justify-between p-6"
-            >
-              <div>
-                <Typography variant="h4" color="blue-gray" className="mb-1">
-                  쓰레기 배출 지도
-                </Typography>
-              </div>
-            </CardHeader>
-            <CardBody>
-              <KakaoMap/>
-            </CardBody>
-          </Card>
-      </div>
+      <KakaoMapMain/>
     </div>
   );
 }

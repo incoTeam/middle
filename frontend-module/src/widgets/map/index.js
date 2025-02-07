@@ -1,1 +1,1 @@
-export * from "@/widgets/map/kakao-map"
+export * from "@/widgets/map/kakao-map-main.jsx"
