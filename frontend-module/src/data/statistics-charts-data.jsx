@@ -1,5 +1,6 @@
+import {useState} from "react";
 import {chartsConfig} from "@/configs";
-
+import {MyComponent, SampleChildren} from "@/data/dashboard-axios.jsx";
 
 const websiteViewsChart = {
     type: "bar",
@@ -25,7 +26,7 @@ const websiteViewsChart = {
         },
     },
 };
-
+console.log(SampleChildren.toString());
 const dailySalesChart = {
     type: "line",
     height: 220,
@@ -106,13 +107,13 @@ const completedTasksChart = {
 };
 
 export const statisticsChartsData = [
-    {
-        color: "white",
-        title: "Website View",
-        description: "Last Campaign Performance",
-        footer: "campaign sent 2 days ago",
-        chart: websiteViewsChart,
-    },
+    // {
+    //     color: "white",
+    //     title: "Website View",
+    //     description: "Last Campaign Performance",
+    //     footer: "campaign sent 2 days ago",
+    //     chart: websiteViewsChart,
+    // },
     {
         color: "white",
         title: "Daily Sales",
@@ -120,13 +121,14 @@ export const statisticsChartsData = [
         footer: "updated 4 min ago",
         chart: dailySalesChart,
     },
-    {
-        color: "white",
-        title: "Completed Tasks",
-        description: "Last Campaign Performance",
-        footer: "just updated",
-        chart: completedTasksChart,
-    },
+    // {
+    //     color: "white",
+    //     title: "Completed Tasks",
+    //     description: "Last Campaign Performance",
+    //     footer: "just updated",
+    //     chart: completedTasksChart,
+    // },
 ];
+
 
 export default statisticsChartsData;
