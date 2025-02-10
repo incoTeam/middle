@@ -18,6 +18,11 @@ export default defineConfig({
                 changeOrigin: true,  // CORS 문제 해결을 위해 원본 출처를 변경
                 rewrite: (path) => path.replace(/^\/api2/, "/api/openData/code.json"),
             },
+            "/wasteStats": {
+                target: "https://www.recycling-info.or.kr",
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/wasteStats/, ""),
+            }
         },
 
     },
