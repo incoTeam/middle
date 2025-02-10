@@ -14,9 +14,9 @@ export default defineConfig({
                 rewrite: (path) => path.replace(/^\/test/, ""),
             },
             "/api2": {
-                target: "http://www.dcco.kr/api/openData/code.json",
-                changeOrigin: true,
-                rewrite: (path) => path.replace(/^\/api2/, ""),
+                target: "https://www.dcco.kr",  // https로 변경
+                changeOrigin: true,  // CORS 문제 해결을 위해 원본 출처를 변경
+                rewrite: (path) => path.replace(/^\/api2/, "/api/openData/code.json"),
             },
         },
 

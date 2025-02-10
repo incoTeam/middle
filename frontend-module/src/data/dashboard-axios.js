@@ -1,5 +1,6 @@
 import {useState, useEffect} from 'react';
 import axios from 'axios';
+import xmlToJson from "@/util/xml-to-json.js";
 
 export function MyComponent() {
     const [data, setData] = useState(null);
@@ -31,7 +32,7 @@ export function MyComponent() {
                     '\n' +
                     'COL5\tstring\n' +
                     '총소각');
-                console.log('월별 쓰레기 반입 및 소각현황:', response.data);
+                console.log('월별 쓰레기 반입 및 소각현황:', xmlToJson(response.data));
                 setData(response.data);
             } catch (error) {
                 console.error('월별 쓰레기 반입 및 소각현황 API 호출 실패:', error);
