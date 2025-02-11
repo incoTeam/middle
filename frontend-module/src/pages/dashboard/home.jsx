@@ -19,7 +19,7 @@ import {
 } from "@heroicons/react/24/outline";
 import {StatisticsCard} from "@/widgets/cards";
 import {StatisticsChart} from "@/widgets/charts";
-import {MyComponent} from "@/data/dashboard-axios.jsx";
+
 import {
     statisticsCardsData,
     statisticsChartsData,
@@ -69,8 +69,6 @@ export function Home() {
                 ))}
             </div>
             <div className="mb-6">
-                <MyComponent/>
-                <WasteStatisticsData/>
             </div>
             <div className="mb-4 grid grid-cols-1 gap-6 xl:grid-cols-3">
                 <Card className="overflow-hidden xl:col-span-2 border border-blue-gray-100 shadow-sm">

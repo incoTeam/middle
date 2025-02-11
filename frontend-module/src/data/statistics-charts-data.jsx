@@ -1,6 +1,36 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {chartsConfig} from "@/configs";
-import {MyComponent, SampleChildren} from "@/data/dashboard-axios.jsx";
+import fetchDataOut from "@/data/dashboard-axios.jsx";
+
+
+const garbageService = async () => {
+    try {
+        const garbargeData = await fetchDataOut.garbageData();
+        return garbargeData;
+    } catch (error) {
+        console.log(error);
+    }
+};
+const items = await garbageService();
+
+const extractColumnValues = (items, columnName) => {
+    return items.map(item => item[columnName]?._text);
+};
+
+// COL2 값들을 배열로 변환
+const updatedCOL5Items = extractColumnValues(items, 'COL5');
+const updatedCOL1Items = extractColumnValues(items, 'COL1');
+
+const chartMessage = () => {
+    let message = "";
+    if (updatedCOL5Items[updatedCOL5Items.length - 1] > updatedCOL5Items[updatedCOL5Items.length - 2]) {
+        message = `어제보다 소각량이 ${updatedCOL5Items[updatedCOL5Items.length - 1] - updatedCOL5Items[updatedCOL5Items.length - 2]}Ton 증가 하였습니다.`;
+    } else {
+        message = `어제보다 소각량이 ${updatedCOL5Items[updatedCOL5Items.length - 2] - updatedCOL5Items[updatedCOL5Items.length - 1]}Ton 감소 하였습니다.`;
+    }
+    return message;
+};
+
 
 const websiteViewsChart = {
     type: "bar",
@@ -26,14 +56,15 @@ const websiteViewsChart = {
         },
     },
 };
-console.log(SampleChildren.toString());
+
+
 const dailySalesChart = {
-    type: "line",
+    type: "bar",
     height: 220,
     series: [
         {
             name: "Sales",
-            data: [50, 40, 200, 320, 500, 350, 200, 230, 500],
+            data: updatedCOL5Items,
         },
     ],
     options: {
@@ -47,17 +78,7 @@ const dailySalesChart = {
         },
         xaxis: {
             ...chartsConfig.xaxis,
-            categories: [
-                "Apr",
-                "May",
-                "Jun",
-                "Jul",
-                "Aug",
-                "Sep",
-                "Oct",
-                "Nov",
-                "Dec",
-            ],
+            categories: updatedCOL1Items,
         },
     },
 };
@@ -116,9 +137,9 @@ export const statisticsChartsData = [
     // },
     {
         color: "white",
-        title: "Daily Sales",
-        description: "15% increase in today sales",
-        footer: "updated 4 min ago",
+        title: "일일 쓰레기 소각량",
+        description: chartMessage(),
+        footer: "from. 대전 도시공사",
         chart: dailySalesChart,
     },
     // {
