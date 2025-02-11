@@ -62,13 +62,18 @@ export function Home() {
                                 className="flex items-center font-normal text-blue-gray-600"
                             >
                                 <ClockIcon strokeWidth={2} className="h-4 w-4 text-blue-gray-400"/>
-                                &nbsp;{props.footer}
+                                &nbsp;
+                                {props.footer}
+                                <a href="https://naver.com" className="text-blue-500 hover:underline ml-auto">
+                                    상세 페이지로 이동 >>
+                                </a>
                             </Typography>
                         }
+
                     />
                 ))}
             </div>
-            
+
             <div className="mb-6">
             </div>
             <div className="mb-4 grid grid-cols-1 gap-6 xl:grid-cols-3">
