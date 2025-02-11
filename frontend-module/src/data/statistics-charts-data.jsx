@@ -10,7 +10,7 @@ const wasteService = async () => {
     }
 };
 const waseteData = await wasteService();
-
+console.log("waseteData", waseteData);
 // 같은 measuringDay의 refuseWeight 합산
 const aggregateWasteData = (data) => {
     const result = {};
