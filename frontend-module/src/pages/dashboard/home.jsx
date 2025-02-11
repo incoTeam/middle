@@ -64,7 +64,7 @@ export function Home() {
                                 <ClockIcon strokeWidth={2} className="h-4 w-4 text-blue-gray-400"/>
                                 &nbsp;
                                 {props.footer}
-                                <a href="https://naver.com" className="text-blue-500 hover:underline ml-auto">
+                                <a href="/dashboard/GarbageView" className="text-blue-500 hover:underline ml-auto">
                                     상세 페이지로 이동 >>
                                 </a>
                             </Typography>
