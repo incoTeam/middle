@@ -1,12 +1,53 @@
-import {useEffect, useState} from "react";
 import {chartsConfig} from "@/configs";
 import fetchDataOut from "@/data/dashboard-axios.jsx";
 
 
+const wasteService = async () => {
+    try {
+        return await fetchDataOut.wasteData();
+    } catch (error) {
+        console.log(error);
+    }
+};
+const waseteData = await wasteService();
+
+// 같은 measuringDay의 refuseWeight 합산
+const aggregateWasteData = (data) => {
+    const result = {};
+
+    data.forEach(item => {
+        const {measuringDay, refuseWeight} = item;
+
+        // 해당 measuringDay가 이미 result에 있으면 refuseWeight 합산
+        if (result[measuringDay]) {
+            result[measuringDay].refuseWeight += Number(refuseWeight);
+        } else {
+            // 없으면 새로운 항목 추가
+            result[measuringDay] = {
+                ...item,
+                refuseWeight: Number(refuseWeight) // refuseWeight를 숫자로 변환하여 저장
+            };
+        }
+    });
+
+    // 객체에서 배열로 변환하여 반환
+    return Object.values(result);
+};
+
+const aggregatedData = aggregateWasteData(waseteData);
+console.log(aggregatedData);
+
+const aggregateColumnValues = (items, columnName) => {
+    return items.map(item => item[columnName]);
+};
+
+//컬럼 쓰레기 배열에 담기
+const aggregateColumNameValue = aggregateColumnValues(aggregatedData, "measuringDay");
+const refuseWeightValue = aggregateColumnValues(aggregatedData, "refuseWeight");
+
 const garbageService = async () => {
     try {
-        const garbargeData = await fetchDataOut.garbageData();
-        return garbargeData;
+        return await fetchDataOut.garbageData();
     } catch (error) {
         console.log(error);
     }
@@ -21,13 +62,17 @@ const extractColumnValues = (items, columnName) => {
 const updatedCOL5Items = extractColumnValues(items, 'COL5');
 const updatedCOL1Items = extractColumnValues(items, 'COL1');
 
-const chartMessage = () => {
+const chartMessage = (culumName, text) => {
     let message = "";
-    if (updatedCOL5Items[updatedCOL5Items.length - 1] > updatedCOL5Items[updatedCOL5Items.length - 2]) {
-        message = `어제보다 소각량이 ${updatedCOL5Items[updatedCOL5Items.length - 1] - updatedCOL5Items[updatedCOL5Items.length - 2]}Ton 증가 하였습니다.`;
+    const difference = Math.abs(culumName[culumName.length - 1] - culumName[culumName.length - 2]).toFixed(2); // 차이를 소수점 둘째 자리까지만 표시
+
+
+    if (culumName[culumName.length - 1] > culumName[culumName.length - 2]) {
+        message = `${text}보다 소각량이 ${difference}Ton 증가 하였습니다.`;
     } else {
-        message = `어제보다 소각량이 ${updatedCOL5Items[updatedCOL5Items.length - 2] - updatedCOL5Items[updatedCOL5Items.length - 1]}Ton 감소 하였습니다.`;
+        message = `${text}보다 소각량이 ${difference}Ton 감소 하였습니다.`;
     }
+
     return message;
 };
 
@@ -60,10 +105,10 @@ const websiteViewsChart = {
 
 const dailySalesChart = {
     type: "bar",
-    height: 220,
+    height: 280,
     series: [
         {
-            name: "Sales",
+            name: "TON",
             data: updatedCOL5Items,
         },
     ],
@@ -85,7 +130,7 @@ const dailySalesChart = {
 
 const completedTaskChart = {
     type: "line",
-    height: 220,
+    height: 280,
     series: [
         {
             name: "Sales",
@@ -103,17 +148,7 @@ const completedTaskChart = {
         },
         xaxis: {
             ...chartsConfig.xaxis,
-            categories: [
-                "Apr",
-                "May",
-                "Jun",
-                "Jul",
-                "Aug",
-                "Sep",
-                "Oct",
-                "Nov",
-                "Dec",
-            ],
+            categories: aggregateColumNameValue,
         },
     },
 };
@@ -122,7 +157,7 @@ const completedTasksChart = {
     series: [
         {
             name: "Tasks",
-            data: [50, 40, 300, 220, 500, 250, 400, 230, 500],
+            data: refuseWeightValue,
         },
     ],
 };
@@ -138,17 +173,17 @@ export const statisticsChartsData = [
     {
         color: "white",
         title: "일일 쓰레기 소각량",
-        description: chartMessage(),
+        description: chartMessage(updatedCOL5Items, "어제"),
         footer: "from. 대전 도시공사",
         chart: dailySalesChart,
     },
-    // {
-    //     color: "white",
-    //     title: "Completed Tasks",
-    //     description: "Last Campaign Performance",
-    //     footer: "just updated",
-    //     chart: completedTasksChart,
-    // },
+    {
+        color: "white",
+        title: "생활 폐기물 월별 처리량(소각 + 매립)",
+        description: chartMessage(refuseWeightValue, "지난달"),
+        footer: "2Year Ago",
+        chart: completedTasksChart,
+    },
 ];
 
 
