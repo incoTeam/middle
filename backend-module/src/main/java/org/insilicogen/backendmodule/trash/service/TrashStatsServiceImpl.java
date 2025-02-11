@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.insilicogen.backendmodule.trash.domain.TrashStatsDomain;
+import org.insilicogen.backendmodule.trash.domain.TrashStatsWords;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -51,13 +53,28 @@ public class TrashStatsServiceImpl implements TrashStatsService {
     private List<TrashStatsDomain> refineData(List<TrashStatsDomain> data) {
         List<TrashStatsDomain> refinedData = new ArrayList<>();
 
-        for(int i = 0; i < data.size(); i++) {
+        List<String> validCities = Arrays.asList(
+                TrashStatsWords.SEOUL.getCodeName(),
+                TrashStatsWords.DAEJEON.getCodeName(),
+                TrashStatsWords.BUSAN.getCodeName(),
+                TrashStatsWords.GANGWON.getCodeName(),
+                TrashStatsWords.GWANGJU.getCodeName()
+        );
 
-            if (("서울".equals(data.get(i).getCityJidtCdNm()) || "대전".equals(data.get(i).getCityJidtCdNm()) || "부산".equals(data.get(i).getCityJidtCdNm())) &&
-                    "종량제방식 등 혼합배출".equals(data.get(i).getWtTypeGbNm()) && "가연성".equals(data.get(i).getWsteMCodeNm()) && "소계".equals(data.get(i).getWsteCodeNm())){
+        System.out.println(validCities);
+
+        for(int i = 0; i < data.size(); i++) {
+        //enum이나 상수값만 따로 뽑는 클래스만들기
+            if (validCities.contains(data.get(i).getCityJidtCdNm()) &&
+                    TrashStatsWords.VOLUMEBASED.getCodeName().equals(data.get(i).getWtTypeGbNm()) &&
+                    TrashStatsWords.FLAMMABLE.getCodeName().equals(data.get(i).getWsteMCodeNm()) &&
+                    TrashStatsWords.TOTAL.getCodeName().equals(data.get(i).getWsteCodeNm()))
+            {
                 refinedData.add(data.get(i));
             }
         }
+
+        System.out.println(refinedData);
 
         return refinedData;
     }

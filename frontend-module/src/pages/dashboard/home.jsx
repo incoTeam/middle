@@ -24,7 +24,7 @@ import {
     statisticsCardsData,
     statisticsChartsData,
     projectsTableData,
-    ordersOverviewData, WasteStatisticsData,
+    ordersOverviewData,
 } from "@/data";
 import {CheckCircleIcon, ClockIcon} from "@heroicons/react/24/solid";
 import {KakaoMapMain} from "@/widgets/map";
