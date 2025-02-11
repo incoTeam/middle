@@ -1,91 +1,89 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import foodWastePositionData from "./food-waste-position.json";
 import trashMarkerPosition from "./trash-marker-position.json";
 import trashPosition from "./trash-position.json";
-import {WasteStatisticsData} from "@/data/index.js";
+import {getWasteStatisticsData} from "@/data/index.js";
 
-import { Card, CardBody, CardHeader, Tab, Tabs, TabsHeader } from "@material-tailwind/react";
+import {Card, CardBody, CardHeader, Tab, Tabs, TabsHeader} from "@material-tailwind/react";
 
 export function KakaoMapMain() {
     const [map, setMap] = useState(null);
     const [markers, setMarkers] = useState([]);
     const [polygons, setPolygons] = useState([]);
-    const infoWindows = [];
+    const [infoWindows, setInfoWindows] = useState([]);
+    const [wasteStaticsData, setWasteStaticsData] = useState([]);
 
     const trashPolygons = trashPosition;
     const trashMarkers = trashMarkerPosition;
     const foodWasteMarkers = foodWastePositionData;
 
     useEffect(() => {
-        // Kakao 지도 생성
-        const mapContainer = document.getElementById("kakaoMapMain");
-        const mapOptions = {
-            center: new kakao.maps.LatLng(36.3504119, 127.3845475),
-            level: 12,
-        };
-        const kakaoMapMain = new kakao.maps.Map(mapContainer, mapOptions);
-        setMap(kakaoMapMain);
+        const initializeMap = async() =>{
+            // Kakao 지도 생성
+            const mapContainer = document.getElementById("kakaoMapMain");
+            const mapOptions = {
+                center: new kakao.maps.LatLng(36.3504119, 127.3845475),
+                level: 12,
+            };
+            const kakaoMapMain = new kakao.maps.Map(mapContainer, mapOptions);
+            setMap(kakaoMapMain);
 
-        // 초기 폴리곤 추가
-        const initialPolygons = addPolygons(kakaoMapMain, trashPolygons);
-        setPolygons(initialPolygons);
-        // 초기 마커 추가
-        const initialMarkers = addMarkers(kakaoMapMain, trashMarkers);
-        setMarkers(initialMarkers);
-        console.log(trashMarkers)
-        // 초기 마커의 인포 윈도 값 추가
-
-        const fetchData = async() =>{
-            const data = await WasteStatisticsData();
-            console.log("fetchData ", data);
-
-            if(initialMarkers.length > 0){
-                addInfoWindows(kakaoMapMain, data, trashMarkers);
+            // 초기 폴리곤 추가
+            const initialPolygons = addPolygons(kakaoMapMain, trashPolygons);
+            setPolygons(initialPolygons);
+            // 초기 마커 추가
+            const initialMarkers = addMarkers(kakaoMapMain, trashMarkers);
+            setMarkers(initialMarkers);
+            // 초기 마커의 인포 윈도 값 추가
+            const staticsData = await getWasteStatisticsData();
+            console.log(staticsData);
+            setWasteStaticsData(staticsData);
+            try{
+                if (initialMarkers.length > 0) {
+                    const initialInfoWindows = addInfoWindows(kakaoMapMain, staticsData, trashMarkers);
+                    setInfoWindows(initialInfoWindows);
+                }
+            }catch(error){
+                console.error("데이터를 가져오는 중 오류가 발생했습니다:", error);
             }
-        };
-
-        fetchData();
+        }
+        initializeMap()
     }, []);
 
-    const addInfoWindows = (mapInstance, infoWindowsData, markersData) => {
-        console.log("addInfoWindows", infoWindowsData);
-        console.log("markersData", markersData);
+    const addInfoWindows = (mapInstance, staticsData, markersData) => {
 
-        return markersData.map((markerData, index) => {
-            const { latitude, longitude, "marker-name": markerName } = markerData;
+        infoWindows.forEach((infoWindow)=>infoWindow.setMap(null));
+
+        const newInfoWindows = markersData.map((markerData, index) => {
+            const {latitude, longitude, "marker-name": markerName} = markerData;
             const iwPosition = new kakao.maps.LatLng(latitude, longitude);
 
-            // infoWindowsData의 순서가 맞다면 index로 매칭
-            const infoWindowData = infoWindowsData[index]; // 순서대로 매칭
+            const infoWindowData = staticsData[index];
 
-            // infoWindowData가 존재하면 iwContent 설정, 없으면 기본 값 설정
             const iwContent = infoWindowData
-                ? `<div style="padding:5px;">
+                ? `<div style="width:200px; height:100%; padding:5px;">
                   <strong>${markerName}</strong><br/>
-                  Waste Quantity: ${infoWindowData.WSTE_QTY}
+                  2022년 기준 쓰레기 배출량: ${infoWindowData.WSTE_QTY.toLocaleString()} 톤
               </div>`
-                : `<div style="padding:5px;">No data available</div>`;
-
+                : `<div style="padding:5px;">데이터 불러오기 실패</div>`;
+            // const iwContent = `<div style="padding:5px;">${markerName}</div>`;
             const iwRemovable = true;
 
             const infoWindow = new kakao.maps.InfoWindow({
-                map: mapInstance,
                 position: iwPosition,
                 content: iwContent,
                 removable: iwRemovable
             });
-
-            infoWindows.push(infoWindow);
-
             infoWindow.setMap(mapInstance);
             return infoWindow;
         });
+        return newInfoWindows;
     };
 
 
     const addMarkers = (mapInstance, markersData) => {
         return markersData.map((markerData) => {
-            const { latitude, longitude } = markerData;
+            const {latitude, longitude} = markerData;
             const position = new kakao.maps.LatLng(latitude, longitude);
             const marker = new kakao.maps.Marker({
                 position,
@@ -120,6 +118,7 @@ export function KakaoMapMain() {
 
         if (mapValue === "trashAmtTab") {
             // 음식물 쓰레기 마커 제거
+
             markers.forEach((marker) => marker.setMap(null));
             setMarkers([]);
 
@@ -128,12 +127,12 @@ export function KakaoMapMain() {
             const newPolygons = addPolygons(map, trashPolygons);
             setPolygons(newPolygons);
 
-            infoWindows.map((infoWindow) => {
-                infoWindow.open(map, markers);
-            })
+            const newInfoWindows = addInfoWindows(map, wasteStaticsData, trashMarkers);
+            setInfoWindows(newInfoWindows);
 
             let moveLatLon = new kakao.maps.LatLng(36.3504119, 127.3845475);
-            // 지도 중심을 이동 시킵니다
+
+            // 지도 중심을 이동
             map.setCenter(moveLatLon);
             // 지도 레벨 변경
             map.setLevel(12);
@@ -146,12 +145,12 @@ export function KakaoMapMain() {
             const newMarkers = addMarkers(map, foodWasteMarkers);
             setMarkers(newMarkers);
 
-            infoWindows.map((infoWindow)=>{
-                infoWindow.close();
-            })
+            infoWindows.forEach((infoWindow) => infoWindow.setMap(null));
+            setInfoWindows([]);
 
             let moveLatLon = new kakao.maps.LatLng(36.3504119, 127.3845475);
-            // 지도 중심을 이동 시킵니다
+
+            // 지도 중심을 이동
             map.setCenter(moveLatLon);
             // 지도 레벨 변경
             map.setLevel(6);

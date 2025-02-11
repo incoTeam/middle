@@ -13,5 +13,15 @@
     "marker-name" : "대전광역시",
     "latitude" : 36.3504119,
     "longitude" : 127.3845475
+  },
+  {
+    "marker-name" : "대구광역시",
+    "latitude" : 35.8714354,
+    "longitude" : 128.601445
+  },
+  {
+    "marker-name" : "광주광역시",
+    "latitude" : 35.1595454,
+    "longitude" : 126.8526012
   }
 ]

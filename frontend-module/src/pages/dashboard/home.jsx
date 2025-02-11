@@ -24,7 +24,7 @@ import {
     statisticsCardsData,
     statisticsChartsData,
     projectsTableData,
-    ordersOverviewData, WasteStatisticsData,
+    ordersOverviewData,
 } from "@/data";
 import {CheckCircleIcon, ClockIcon} from "@heroicons/react/24/solid";
 import {KakaoMapMain} from "@/widgets/map";
@@ -69,8 +69,7 @@ export function Home() {
                 ))}
             </div>
             <div className="mb-6">
-                {/*<MyComponent/>*/}
-                {/*<WasteStatisticsData/>*/}
+                <MyComponent/>
             </div>
             <div className="mb-4 grid grid-cols-1 gap-6 xl:grid-cols-3">
                 <Card className="overflow-hidden xl:col-span-2 border border-blue-gray-100 shadow-sm">
