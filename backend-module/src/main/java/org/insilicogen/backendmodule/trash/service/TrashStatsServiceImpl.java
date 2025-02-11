@@ -20,6 +20,15 @@ import java.util.Map;
 public class TrashStatsServiceImpl implements TrashStatsService {
 
     String apiUrl = "https://www.recycling-info.or.kr/sds/JsonApi.do";
+    List<TrashStatsDomain> refinedData;
+
+    List<String> validCities = Arrays.asList(
+            TrashStatsWords.SEOUL.getCodeName(),
+            TrashStatsWords.DAEJEON.getCodeName(),
+            TrashStatsWords.BUSAN.getCodeName(),
+            TrashStatsWords.GWANGJU.getCodeName(),
+            TrashStatsWords.DAEGUE.getCodeName()
+    );
 
     @Override
     public ResponseEntity<?> getTrashStats(Map<String, String> params) {
@@ -40,43 +49,51 @@ public class TrashStatsServiceImpl implements TrashStatsService {
             // "data" 부분만 추출
             JsonNode dataNode = rootNode.path("data"); // "data"를 찾음
 
-            List<TrashStatsDomain> data = mapper.readValue(dataNode.toString(), new TypeReference<>() {});
-            List<TrashStatsDomain> refinedData = refineData(data);
+            List<TrashStatsDomain> data = mapper.readValue(dataNode.toString(), new TypeReference<>() {
+            });
 
-            return ResponseEntity.ok(refinedData); // 변환된 데이터 반환
-
+            if (params.get("TYPE").equals("map")) {
+                List<TrashStatsDomain> refinedData = refineDataForMap(data);
+                return ResponseEntity.ok(refinedData);
+            } else if (params.get("TYPE").equals("table")) {
+                List<TrashStatsDomain> refinedData = refineDataForTable(data);
+                return ResponseEntity.ok(refinedData);
+            }else {
+                return null;
+            }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("API 호출 실패: " + e.getMessage());
         }
     }
 
-    private List<TrashStatsDomain> refineData(List<TrashStatsDomain> data) {
-        List<TrashStatsDomain> refinedData = new ArrayList<>();
 
-        List<String> validCities = Arrays.asList(
-                TrashStatsWords.SEOUL.getCodeName(),
-                TrashStatsWords.DAEJEON.getCodeName(),
-                TrashStatsWords.BUSAN.getCodeName(),
-                TrashStatsWords.GANGWON.getCodeName(),
-                TrashStatsWords.GWANGJU.getCodeName()
-        );
+    private List<TrashStatsDomain> refineDataForMap(List<TrashStatsDomain> data) {
+        refinedData = new ArrayList<>();
 
-        System.out.println(validCities);
-
-        for(int i = 0; i < data.size(); i++) {
-        //enum이나 상수값만 따로 뽑는 클래스만들기
+        for (int i = 0; i < data.size(); i++) {
             if (validCities.contains(data.get(i).getCityJidtCdNm()) &&
                     TrashStatsWords.VOLUMEBASED.getCodeName().equals(data.get(i).getWtTypeGbNm()) &&
                     TrashStatsWords.FLAMMABLE.getCodeName().equals(data.get(i).getWsteMCodeNm()) &&
-                    TrashStatsWords.TOTAL.getCodeName().equals(data.get(i).getWsteCodeNm()))
-            {
+                    TrashStatsWords.TOTAL.getCodeName().equals(data.get(i).getWsteCodeNm())) {
                 refinedData.add(data.get(i));
             }
         }
-
         System.out.println(refinedData);
-
         return refinedData;
     }
 
+    private List<TrashStatsDomain> refineDataForTable(List<TrashStatsDomain> data) {
+        refinedData = new ArrayList<>();
+
+        for (int i = 0; i < data.size(); i++) {
+            if (validCities.contains(data.get(i).getCityJidtCdNm()) &&
+                    TrashStatsWords.VOLUMEBASED.getCodeName().equals(data.get(i).getWtTypeGbNm()) &&
+                    TrashStatsWords.FLAMMABLE.getCodeName().equals(data.get(i).getWsteMCodeNm())) {
+                refinedData.add(data.get(i));
+            }
+        }
+        System.out.println(refinedData);
+        return refinedData;
+    }
 }
+

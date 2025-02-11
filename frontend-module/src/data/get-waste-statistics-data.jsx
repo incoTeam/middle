@@ -1,11 +1,12 @@
 import axios from "axios";
 
-export const getWasteStatisticsData = async () => {
+export const getWasteStatisticsData = async (year, type) => {
     const dataParams = {
         PID: 'NTN004',
-        YEAR: '2022',
+        YEAR: year,
         USRID: import.meta.env.VITE_WASTE_USRID,
-        KEY: import.meta.env.VITE_WASTE_APIKEY
+        KEY: import.meta.env.VITE_WASTE_APIKEY,
+        TYPE : type
     };
 
     try {

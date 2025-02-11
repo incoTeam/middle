@@ -4,7 +4,7 @@ import trashMarkerPosition from "./trash-marker-position.json";
 import trashPosition from "./trash-position.json";
 import {getWasteStatisticsData} from "@/data/index.js";
 
-import {Card, CardBody, CardHeader, Tab, Tabs, TabsHeader} from "@material-tailwind/react";
+import {Button, Card, CardBody, CardHeader, Tab, Tabs, TabsHeader} from "@material-tailwind/react";
 
 export function KakaoMapMain() {
     const [map, setMap] = useState(null);
@@ -16,6 +16,7 @@ export function KakaoMapMain() {
     const trashPolygons = trashPosition;
     const trashMarkers = trashMarkerPosition;
     const foodWasteMarkers = foodWastePositionData;
+    const initialWasteStaticsYear = '2022';
 
     useEffect(() => {
         const initializeMap = async() =>{
@@ -28,16 +29,18 @@ export function KakaoMapMain() {
             const kakaoMapMain = new kakao.maps.Map(mapContainer, mapOptions);
             setMap(kakaoMapMain);
 
-            // 초기 폴리곤 추가
-            const initialPolygons = addPolygons(kakaoMapMain, trashPolygons);
-            setPolygons(initialPolygons);
             // 초기 마커 추가
             const initialMarkers = addMarkers(kakaoMapMain, trashMarkers);
             setMarkers(initialMarkers);
+
             // 초기 마커의 인포 윈도 값 추가
-            const staticsData = await getWasteStatisticsData();
-            console.log(staticsData);
+            const staticsData = await getWasteStatisticsData(initialWasteStaticsYear, 'map');
             setWasteStaticsData(staticsData);
+
+            // 초기 폴리곤 추가
+            const initialPolygons = addPolygons(kakaoMapMain, trashPolygons);
+            setPolygons(initialPolygons);
+
             try{
                 if (initialMarkers.length > 0) {
                     const initialInfoWindows = addInfoWindows(kakaoMapMain, staticsData, trashMarkers);
@@ -183,6 +186,9 @@ export function KakaoMapMain() {
                         }}
                     ></div>
                 </CardBody>
+                <Button className="mb-5 mr-5 ml-auto bg-gray-300" color="gray">
+                    상세보기
+                </Button>
             </Card>
         </div>
     );

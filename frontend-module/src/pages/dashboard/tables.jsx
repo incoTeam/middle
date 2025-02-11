@@ -10,6 +10,7 @@ import {
 } from "@material-tailwind/react";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
 import { authorsTableData, projectsTableData } from "@/data";
+import {MapDetail} from "@/widgets/map/index.js";
 
 export function Tables() {
   return (
@@ -214,6 +215,7 @@ export function Tables() {
           </table>
         </CardBody>
       </Card>
+      <MapDetail/>
     </div>
   );
 }
