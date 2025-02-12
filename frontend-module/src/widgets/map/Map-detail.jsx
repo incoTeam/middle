@@ -1,85 +1,110 @@
 import React, {useEffect, useState} from "react";
 import {Card, CardBody, CardHeader, Tab, Tabs, TabsHeader, Typography} from "@material-tailwind/react";
 import {getWasteStatisticsData} from "@/data/index.js";
+import TableHeaderMapping from "@/widgets/map/Table-header-mapping.jsx";
 
-
-export function MapDetail(){
+export function MapDetail() {
 
     const [wasteStaticsData, setWasteStaticsData] = useState([]);
-    const [year, setYear] = useState('2020');
+    const [year, setYear] = useState('2020')
+    const selectedHeader = ['WT_TYPE_GB_NM', 'WSTE_M_CODE_NM',
+        'WSTE_CODE_NM', 'WSTE_QTY', 'TOT_RECY_QTY', 'TOT_INCI_QTY', 'TOT_FILL_QTY', 'TOT_ETC_QTY'];
 
     useEffect(() => {
-        const initializeTable = async() =>{
-            const wasteStaticsData = await getWasteStatisticsData(year, 'table');
-            console.log(wasteStaticsData[0]);
-            setWasteStaticsData(wasteStaticsData);
+        const initializeTable = async () => {
+            const staticsData = await getWasteStatisticsData(year, 'table');
+            setWasteStaticsData(staticsData);
         }
 
         initializeTable();
     }, [year]);
 
-    const renderTableHeader = () =>{
-
-        // 이거 다시봐야함
-        const headers = Object.keys(wasteStaticsData[0]).filter(key => key !== "cityJidtCdNm");
-
+    const renderTableHeader = () => {
+        if (wasteStaticsData.length === 0) return null;
 
         return (
             <tr>
-                <th>도시</th>
-                {headers.map((header, index) => (
-                    <th key={index}>{header}</th>
+                <th
+                    className="border-b border-blue-gray-50 py-3 px-5 text-left"
+                >
+                    시도
+                </th>
+                {selectedHeader.map((header, index) => (
+                    <th
+                        key={index}
+                        className="border-b border-blue-gray-50 py-3 px-5 text-left"
+                    >
+                        {TableHeaderMapping[header] || header}
+                    </th>
                 ))}
             </tr>
         );
     }
 
     const renderTableBody = () => {
+        if (wasteStaticsData.length === 0) return null;
+
         return wasteStaticsData.map((row, rowIndex) => (
             <tr key={rowIndex}>
-                <td>{row.city}</td>
-                {Object.keys(row).filter(key => key !== "city").map((key, colIndex) => (
-                    <td key={colIndex}>{row[key]}</td>
+                <td
+                    className="py-3 px-5 border-b border-blue-gray-50"
+                >
+                    {row.CITY_JIDT_CD_NM}
+                </td>
+                {selectedHeader.map((key, colIndex) => (
+                    <td
+                        key={colIndex}
+                        className="py-3 px-5 border-b border-blue-gray-50"
+                    >
+                        {row[key]}
+                    </td>
                 ))}
             </tr>
         ));
     }
 
     const changeTable = (e) => {
-        const selectedYear = e.currentTarget.value;
+        const selectedYear = e.currentTarget.dataset.value;
         setYear(selectedYear);
     };
-    return(
-        <Card>
-            <CardHeader variant="gradient" color="gray" className="mb-8 p-6">
-                <Typography variant="h6" color="white">
-                    쓰레기 배출량 상세보기 페이지
-                </Typography>
-                <Tabs value="2020">
-                    <TabsHeader>
-                        <Tab value="2020" onClick={changeTable}>
-                            2020년
-                        </Tab>
-                        <Tab value="2021" onClick={changeTable}>
-                            2021년
-                        </Tab>
-                        <Tab value="2022" onClick={changeTable}>
-                            2022년
-                        </Tab>
-                    </TabsHeader>
-                </Tabs>
-            </CardHeader>
-            <CardBody>
-                <table className="w-full min-w-[640px] table-auto">
-                    <thead>
+
+    return (
+        <div className="mt-12 mb-8 flex flex-col gap-12 ">
+            <Card>
+                <CardHeader variant="gradient" color="gray" className="mb-8 p-6">
+                    <Typography variant="h6" color="white">
+                        쓰레기 배출량 상세보기 페이지
+                    </Typography>
+                    <Tabs value={year}>
+                        <TabsHeader>
+                            <Tab value="2020" onClick={changeTable}>
+                                2020년
+                            </Tab>
+                            <Tab value="2021" onClick={changeTable}>
+                                2021년
+                            </Tab>
+                            <Tab value="2022" onClick={changeTable}>
+                                2022년
+                            </Tab>
+                        </TabsHeader>
+                    </Tabs>
+                </CardHeader>
+                <CardBody>
+                    <table className="w-full min-w-[640px] table-fixed">
+                        <thead>
                         {renderTableHeader()}
-                    </thead>
-                    <tbody>
-                        {renderTableBody()}
-                    </tbody>
-                </table>
-            </CardBody>
-        </Card>
+                        </thead>
+                    </table>
+                    <div className="max-h-[800px] overflow-y-auto">
+                        <table className="w-full min-w-[640px] table-fixed">
+                            <tbody>
+                                {renderTableBody()}
+                            </tbody>
+                        </table>
+                    </div>
+                </CardBody>
+            </Card>
+        </div>
     )
 }
 

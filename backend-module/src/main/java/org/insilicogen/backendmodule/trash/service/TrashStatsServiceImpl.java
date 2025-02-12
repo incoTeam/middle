@@ -78,7 +78,6 @@ public class TrashStatsServiceImpl implements TrashStatsService {
                 refinedData.add(data.get(i));
             }
         }
-        System.out.println(refinedData);
         return refinedData;
     }
 
@@ -92,7 +91,6 @@ public class TrashStatsServiceImpl implements TrashStatsService {
                 refinedData.add(data.get(i));
             }
         }
-        System.out.println(refinedData);
         return refinedData;
     }
 }
