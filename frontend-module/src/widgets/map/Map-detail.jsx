@@ -47,14 +47,14 @@ export function MapDetail() {
         return wasteStaticsData.map((row, rowIndex) => (
             <tr key={rowIndex}>
                 <td
-                    className="py-3 px-5 border-b border-blue-gray-50"
+                    className="py-3 px-5 border-b border-blue-gray-100"
                 >
                     {row.CITY_JIDT_CD_NM}
                 </td>
                 {selectedHeader.map((key, colIndex) => (
                     <td
                         key={colIndex}
-                        className="py-3 px-5 border-b border-blue-gray-50"
+                        className="py-3 px-5 border-b border-blue-gray-100"
                     >
                         {row[key]}
                     </td>
@@ -91,7 +91,7 @@ export function MapDetail() {
                 </CardHeader>
                 <CardBody>
                     <table className="w-full min-w-[640px] table-fixed">
-                        <thead>
+                        <thead className="bg-gray-300">
                         {renderTableHeader()}
                         </thead>
                     </table>
