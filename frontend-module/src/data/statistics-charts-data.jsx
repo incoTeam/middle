@@ -59,7 +59,9 @@ const extractColumnValues = (items, columnName) => {
 // COL2 값들을 배열로 변환
 const updatedCOL5Items = extractColumnValues(items, 'COL5');
 const updatedCOL1Items = extractColumnValues(items, 'COL1');
+//오늘의 소각량
 
+const todayGarbage = updatedCOL5Items[updatedCOL5Items.length - 1];
 const chartMessage = (culumName, text) => {
     let message = "";
     const difference = Math.abs(culumName[culumName.length - 1] - culumName[culumName.length - 2]).toFixed(2); // 차이를 소수점 둘째 자리까지만 표시
@@ -159,7 +161,7 @@ const completedTasksChart = {
         },
     ],
 };
-
+const descriptionMessage = chartMessage(updatedCOL5Items, "어제");
 export const statisticsChartsData = [
     // {
     //     color: "white",
@@ -171,7 +173,7 @@ export const statisticsChartsData = [
     {
         color: "white",
         title: "일일 쓰레기 소각량",
-        description: chartMessage(updatedCOL5Items, "어제"),
+        description: descriptionMessage,
         footer: "from. 대전 도시공사",
         chart: dailySalesChart,
     },
@@ -184,5 +186,11 @@ export const statisticsChartsData = [
     },
 ];
 
+const chartDataOutput = {
+    wasteService,
+    fetchDataOut,
+    descriptionMessage,
+    todayGarbage
+}
 
-export default statisticsChartsData;
+export default chartDataOutput;
