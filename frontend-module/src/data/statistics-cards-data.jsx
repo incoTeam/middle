@@ -1,13 +1,31 @@
 import {BanknotesIcon, ChartBarIcon, UserPlusIcon, UsersIcon,} from "@heroicons/react/24/solid";
+import getWasteStatisticsData from "@/data/get-waste-statistics-data.jsx";
 
-// const getWasteStaticsData = async () =>{
-//   //22년 5개 시도 합 구하기
-//   //21년 5개 시도 합 구하기
-//   const data = await getWasteStaticsData('2022', 'map');
-//   // const data2 = await getWasteStatisticsData('2021', 'map');
-//
-//   return data;
-// }
+const getWasteStaticData = async () =>{
+  try{
+    return await getWasteStatisticsData('2022', 'map');
+  }catch(error){
+    console.log(error);
+  }
+};
+
+const wasteStaticData = await getWasteStaticData();
+
+const sumWasteStaticData = (wasteStaticData) => {
+  const result = {};
+
+  console.log(wasteStaticData);
+
+  // wasteStaticData.forEach(item => {
+  //   const {wsteQty, value} = item;
+  //
+  //   result.value += value;
+  //
+  // })
+  return wasteStaticData[0].WSTE_QTY;
+}
+
+const result = sumWasteStaticData(wasteStaticData);
 
 
 export const statisticsCardsData = [
@@ -48,7 +66,7 @@ export const statisticsCardsData = [
     color: "gray",
     icon: ChartBarIcon,
     title: "연간 쓰레기 발생량",
-    value: value,
+    value: result,
     footer: {
       color: "text-red-500",
       value: "+5%",
