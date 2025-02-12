@@ -1,5 +1,11 @@
 {
   "dependencies": {
+    "datatables.net-bs5": "^2.2.2",
+    "datatables.net-dt": "^2.2.2",
+    "datatables.net-react": "^1.0.0",
+    "datatables.net-responsive-dt": "^3.0.4",
+    "datatables.net-select-dt": "^3.0.0",
+    "jquery": "^3.7.1",
     "react-paginate": "^8.3.0"
   }
 }

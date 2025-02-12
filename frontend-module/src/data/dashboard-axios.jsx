@@ -33,12 +33,9 @@ const dayAgo2 = String(twoYearsAgo.getDate()).padStart(2, '0');
 // 최종 포맷
 const formattedDateTwoYearAgo = `${twoYearAgo}${monthAgo2}${dayAgo2}`;
 
-console.log(formattedDateAgo); // 예시 출력: "20230211"
-
-
 const garbagePostData = {
     serviceKey: serviceKey,
-    svcId: 'OPEN_44012_IPCIA', // 서비스 아이디
+    svcId: 'OPEN_44012_IPCIA', // 서비스 아이디wa
     para1: formattedDateAgo, // 검색 시작일자
     para2: formattedDate, // 검색 종료일자
 };
@@ -76,10 +73,7 @@ const garbageData = async () => {
 const wasteData = async () => {
     try {
         const response = await axios.get('/api2', {params: wastePostData});
-        const data = response.data.dataList;
-
-        console.log('폐기물 처리통계 상세내용:', data);
-        return data;
+        return response.data.dataList;
     } catch (error) {
         console.error('폐기물 처리통계 상세내용 API 호출 실패:', error);
         return error;

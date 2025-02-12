@@ -65,7 +65,7 @@ export function Home() {
                                 &nbsp;
                                 {props.footer}
                                 <a href="/dashboard/GarbageView" className="text-blue-500 hover:underline ml-auto">
-                                    상세 페이지로 이동 >>
+                                    상세 페이지로 이동
                                 </a>
                             </Typography>
                         }

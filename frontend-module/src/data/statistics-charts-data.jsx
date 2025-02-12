@@ -10,7 +10,6 @@ const wasteService = async () => {
     }
 };
 const waseteData = await wasteService();
-console.log("waseteData", waseteData);
 // 같은 measuringDay의 refuseWeight 합산
 const aggregateWasteData = (data) => {
     const result = {};
@@ -35,7 +34,6 @@ const aggregateWasteData = (data) => {
 };
 
 const aggregatedData = aggregateWasteData(waseteData);
-console.log(aggregatedData);
 
 const aggregateColumnValues = (items, columnName) => {
     return items.map(item => item[columnName]);
