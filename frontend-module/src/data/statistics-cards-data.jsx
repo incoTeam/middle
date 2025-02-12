@@ -1,9 +1,14 @@
-import {
-  BanknotesIcon,
-  UserPlusIcon,
-  UsersIcon,
-  ChartBarIcon,
-} from "@heroicons/react/24/solid";
+import {BanknotesIcon, ChartBarIcon, UserPlusIcon, UsersIcon,} from "@heroicons/react/24/solid";
+
+// const getWasteStaticsData = async () =>{
+//   //22년 5개 시도 합 구하기
+//   //21년 5개 시도 합 구하기
+//   const data = await getWasteStaticsData('2022', 'map');
+//   // const data2 = await getWasteStatisticsData('2021', 'map');
+//
+//   return data;
+// }
+
 
 export const statisticsCardsData = [
   {
@@ -42,12 +47,12 @@ export const statisticsCardsData = [
   {
     color: "gray",
     icon: ChartBarIcon,
-    title: "Sales",
-    value: "$103,430",
+    title: "연간 쓰레기 발생량",
+    value: value,
     footer: {
-      color: "text-green-500",
+      color: "text-red-500",
       value: "+5%",
-      label: "than yesterday",
+      label: "작년보다 늘었습니다.",
     },
   },
 ];

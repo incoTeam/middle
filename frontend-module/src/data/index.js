@@ -1,4 +1,4 @@
-export * from "@/data/statistics-cards-data";
+export * from "@/data/statistics-cards-data.jsx";
 export * from "@/data/statistics-charts-data.jsx";
 export * from "@/data/projects-table-data";
 export * from "@/data/orders-overview-data";

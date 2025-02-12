@@ -4,7 +4,8 @@ import trashMarkerPosition from "./trash-marker-position.json";
 import trashPosition from "./trash-position.json";
 import {getWasteStatisticsData} from "@/data/index.js";
 
-import {Button, Card, CardBody, CardHeader, Tab, Tabs, TabsHeader} from "@material-tailwind/react";
+import {Card, CardBody, CardFooter, CardHeader, Tab, Tabs, TabsHeader, Typography} from "@material-tailwind/react";
+import {ClockIcon} from "@heroicons/react/24/solid/index.js";
 
 export function KakaoMapMain() {
     const [map, setMap] = useState(null);
@@ -29,7 +30,7 @@ export function KakaoMapMain() {
             };
             const kakaoMapMain = new kakao.maps.Map(mapContainer, mapOptions);
             setMap(kakaoMapMain);
-
+            kakaoMapMain.setMaxLevel(12);
             // 초기 마커 추가
             const initialMarkers = addMarkers(kakaoMapMain, trashMarkers);
             setMarkers(initialMarkers);
@@ -174,6 +175,7 @@ export function KakaoMapMain() {
             // 지도 중심을 이동
             map.setCenter(moveLatLon);
             // 지도 레벨 변경
+            map.setMaxLevel(12);
             map.setLevel(12);
         } else if (mapValue === "foodWasteTab") {
             // 쓰레기 배출량 폴리곤 제거
@@ -196,6 +198,7 @@ export function KakaoMapMain() {
             // 지도 중심을 이동
             map.setCenter(moveLatLon);
             // 지도 레벨 변경
+            map.setMaxLevel(7);
             map.setLevel(6);
         }
     };
@@ -226,13 +229,24 @@ export function KakaoMapMain() {
                         }}
                     ></div>
                 </CardBody>
-                <a href="/dashboard/MapDetailView" className="text-blue-500 hover:underline ml-auto">
-                    상세 페이지로 이동 >>
-                </a>
+                <CardFooter>
+                    <Typography
+                        variant="small"
+                        className="flex items-center font-normal text-blue-gray-600"
+                    >
+                        <ClockIcon strokeWidth={2} className="h-4 w-4 text-blue-gray-400"/>
+                        &nbsp;
+                        From 2022
+                        <a href="/dashboard/MapDetailView" className="text-blue-500 hover:underline ml-auto">
+                            상세 페이지로 이동
+                        </a>
+                    </Typography>
+                </CardFooter>
             </Card>
         </div>
     );
 }
+
 
 KakaoMapMain.displayName = "/src/widgets/map/kakao-map-main.jsx";
 
