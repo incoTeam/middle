@@ -10,7 +10,8 @@ export function KakaoMapMain() {
     const [map, setMap] = useState(null);
     const [markers, setMarkers] = useState([]);
     const [polygons, setPolygons] = useState([]);
-    const [infoWindows, setInfoWindows] = useState([]);
+    const [infoWindowsTrash, setInfoWindowsTrash] = useState([]);
+    const [infoWindowsFood, setInfoWindowsFood] = useState([]);
     const [wasteStaticsData, setWasteStaticsData] = useState([]);
 
     const trashPolygons = trashPosition;
@@ -43,8 +44,9 @@ export function KakaoMapMain() {
 
             try{
                 if (initialMarkers.length > 0) {
-                    const initialInfoWindows = addInfoWindows(kakaoMapMain, staticsData, trashMarkers);
-                    setInfoWindows(initialInfoWindows);
+                    // 초기 인포윈도 설정
+                    const initialInfoWindows = addInfoWindowsForTrash(kakaoMapMain, staticsData, trashMarkers);
+                    setInfoWindowsTrash(initialInfoWindows);
                 }
             }catch(error){
                 console.error("데이터를 가져오는 중 오류가 발생했습니다:", error);
@@ -53,20 +55,19 @@ export function KakaoMapMain() {
         initializeMap()
     }, []);
 
-    const addInfoWindows = (mapInstance, staticsData, markersData) => {
+    const addInfoWindowsForTrash = (mapInstance, staticsData, markersData) => {
 
-        infoWindows.forEach((infoWindow)=>infoWindow.setMap(null));
+        infoWindowsTrash.forEach((infoWindow)=>infoWindow.setMap(null));
 
         const newInfoWindows = markersData.map((markerData, index) => {
             const {latitude, longitude, "marker-name": markerName} = markerData;
             const iwPosition = new kakao.maps.LatLng(latitude, longitude);
-
             const infoWindowData = staticsData[index];
 
             const iwContent = infoWindowData
-                ? `<div style="width:200px; height:100%; padding:5px;">
+                ? `<div style="width:250px; height:100%; padding:5px;">
                   <strong>${markerName}</strong><br/>
-                  2022년 기준 쓰레기 배출량: ${infoWindowData.WSTE_QTY.toLocaleString()} 톤
+                  2022년 기준 쓰레기 배출량 : ${infoWindowData.WSTE_QTY.toLocaleString()} 톤
               </div>`
                 : `<div style="padding:5px;">데이터 불러오기 실패</div>`;
             // const iwContent = `<div style="padding:5px;">${markerName}</div>`;
@@ -83,6 +84,40 @@ export function KakaoMapMain() {
         return newInfoWindows;
     };
 
+    const addInfoWindowsForFoodWaste = (mapInstance, positionData, newMarkers) =>{
+
+        const newInfoWindows = positionData.map((markerData, index) => {
+            const {locationName, locationAddress} = markerData;
+            const infoWindowData = positionData[index];
+
+            const iwContent = infoWindowData
+                ?`
+                <div style="width:250px; height:100%; padding:5px;">
+                    <strong>${locationName}</strong><br/>
+                    ${locationAddress}
+                </div>`
+                : `<div style="padding:5px;">데이터 불러오기 실패</div>`;
+
+            const iwRemovable = true;
+
+            const infoWindow = new kakao.maps.InfoWindow({
+                content : iwContent,
+                removable : iwRemovable
+            });
+
+            kakao.maps.event.addListener(newMarkers[index], 'mouseover', function(){
+                infoWindow.open(mapInstance, newMarkers[index]);
+            })
+
+            kakao.maps.event.addListener(newMarkers[index], 'mouseout', function(){
+                infoWindow.close();
+            })
+
+            return infoWindow;
+        })
+
+        return newInfoWindows;
+    }
 
     const addMarkers = (mapInstance, markersData) => {
         return markersData.map((markerData) => {
@@ -90,6 +125,7 @@ export function KakaoMapMain() {
             const position = new kakao.maps.LatLng(latitude, longitude);
             const marker = new kakao.maps.Marker({
                 position,
+                clickable : "true"
             });
             marker.setMap(mapInstance); // 지도에 마커 추가
             return marker;
@@ -130,8 +166,8 @@ export function KakaoMapMain() {
             const newPolygons = addPolygons(map, trashPolygons);
             setPolygons(newPolygons);
 
-            const newInfoWindows = addInfoWindows(map, wasteStaticsData, trashMarkers);
-            setInfoWindows(newInfoWindows);
+            const newInfoWindows = addInfoWindowsForTrash(map, wasteStaticsData, trashMarkers);
+            setInfoWindowsTrash(newInfoWindows);
 
             let moveLatLon = new kakao.maps.LatLng(36.3504119, 127.3845475);
 
@@ -148,8 +184,12 @@ export function KakaoMapMain() {
             const newMarkers = addMarkers(map, foodWasteMarkers);
             setMarkers(newMarkers);
 
-            infoWindows.forEach((infoWindow) => infoWindow.setMap(null));
-            setInfoWindows([]);
+            infoWindowsTrash.forEach((infoWindow) => infoWindow.setMap(null));
+            setInfoWindowsTrash([]);
+
+            // 음식물 쓰레기 위치의 인포 윈도 값 추가
+            const foodWasteInfoWindows = addInfoWindowsForFoodWaste(map, foodWasteMarkers, newMarkers);
+            setInfoWindowsFood(foodWasteInfoWindows);
 
             let moveLatLon = new kakao.maps.LatLng(36.3504119, 127.3845475);
 
@@ -168,10 +208,10 @@ export function KakaoMapMain() {
                         <Tabs value="trashAmtTab">
                             <TabsHeader>
                                 <Tab value="trashAmtTab" onClick={changeMap}>
-                                    쓰레기 배출량
+                                    연간 쓰레기 배출량
                                 </Tab>
                                 <Tab value="foodWasteTab" onClick={changeMap}>
-                                    음식물 쓰레기 위치
+                                    음식물 쓰레기장 위치
                                 </Tab>
                             </TabsHeader>
                         </Tabs>
@@ -186,9 +226,9 @@ export function KakaoMapMain() {
                         }}
                     ></div>
                 </CardBody>
-                <Button className="mb-5 mr-5 ml-auto bg-gray-300" color="gray">
-                    상세보기
-                </Button>
+                <a href="/dashboard/MapDetailView" className="text-blue-500 hover:underline ml-auto">
+                    상세 페이지로 이동 >>
+                </a>
             </Card>
         </div>
     );
