@@ -26,7 +26,6 @@ export const KakaoMapMain = ({ setExportWasteValue }) => {
             const calculatedData = calculateStatisticsData(wasteStaticsData);
             console.log("calculateData:", calculatedData);
 
-            // exportWasteData
             setExportWasteValue(calculatedData);
         }
     };

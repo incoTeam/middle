@@ -1,13 +1,5 @@
-import {
-    HomeIcon,
-    UserCircleIcon,
-    TableCellsIcon,
-    InformationCircleIcon,
-    ServerStackIcon,
-    RectangleStackIcon,
-} from "@heroicons/react/24/solid";
-import {Home, Profile, Tables, Notifications, GarbageView} from "@/pages/dashboard";
-import {SignIn, SignUp} from "@/pages/auth";
+import {HomeIcon, TableCellsIcon,} from "@heroicons/react/24/solid";
+import {GarbageView, Home} from "@/pages/dashboard";
 import {MapDetail} from "@/widgets/map/index.js";
 
 const icon = {
@@ -25,12 +17,6 @@ export const routes = [
                 element: <Home/>,
             },
             {
-                icon: <UserCircleIcon {...icon} />,
-                name: "profile",
-                path: "/profile",
-                element: <Profile/>,
-            },
-            {
                 icon: <TableCellsIcon {...icon} />,
                 name: "GarbageView",
                 path: "/GarbageView",
@@ -41,18 +27,6 @@ export const routes = [
                 name: "MapDetailView",
                 path: "/MapDetailView",
                 element: <MapDetail/>,
-            },
-            {
-                icon: <TableCellsIcon {...icon} />,
-                name: "tables",
-                path: "/tables",
-                element: <Tables/>,
-            },
-            {
-                icon: <InformationCircleIcon {...icon} />,
-                name: "notifications",
-                path: "/notifications",
-                element: <Notifications/>,
             },
         ],
     },
