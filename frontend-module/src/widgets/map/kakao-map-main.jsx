@@ -7,7 +7,8 @@ import {getWasteStatisticsData} from "@/data/index.js";
 import {Card, CardBody, CardFooter, CardHeader, Tab, Tabs, TabsHeader, Typography} from "@material-tailwind/react";
 import {ClockIcon} from "@heroicons/react/24/solid/index.js";
 
-export function KakaoMapMain() {
+export const KakaoMapMain = ({ setExportWasteValue }) => {
+
     const [map, setMap] = useState(null);
     const [markers, setMarkers] = useState([]);
     const [polygons, setPolygons] = useState([]);
@@ -20,8 +21,29 @@ export function KakaoMapMain() {
     const foodWasteMarkers = foodWastePositionData;
     const initialWasteStaticsYear = '2022';
 
+    const calc = (wasteStaticsData) => {
+        if (wasteStaticsData && wasteStaticsData.length > 0) {
+            const calculatedData = calculateStatisticsData(wasteStaticsData);
+            console.log("calculateData:", calculatedData);
+
+            // exportWasteData
+            setExportWasteValue(calculatedData);
+        }
+    };
+
+    const calculateStatisticsData = (wasteStaticsData) => {
+        if (!wasteStaticsData || wasteStaticsData.length === 0) return { sumWsteQty: 0 };
+
+        const extractColumnValues = (items, columnName) => {
+            return items.map((item) => item[columnName]);
+        };
+        const wsteQty = extractColumnValues(wasteStaticsData, "WSTE_QTY");
+        const sumWsteQty = wsteQty.reduce((sum, value) => sum + value, 0);
+        return sumWsteQty;
+    };
+
     useEffect(() => {
-        const initializeMap = async () => {
+        const initializeMap = async() => {
             // Kakao 지도 생성
             const mapContainer = document.getElementById("kakaoMapMain");
             const mapOptions = {
@@ -38,11 +60,7 @@ export function KakaoMapMain() {
             // 초기 마커의 인포 윈도 값 추가
             const staticsData = await getWasteStatisticsData(initialWasteStaticsYear, 'map');
             setWasteStaticsData(staticsData);
-            const extractColumnValues = (items, columnName) => {
-                return items.map(item => item[columnName]);
-            };
-            const test = extractColumnValues(staticsData, "WSTE_QTY");
-            console.log(test);
+
             // 초기 폴리곤 추가
             const initialPolygons = addPolygons(kakaoMapMain, trashPolygons);
             setPolygons(initialPolygons);
@@ -52,12 +70,13 @@ export function KakaoMapMain() {
                     // 초기 인포윈도 설정
                     const initialInfoWindows = addInfoWindowsForTrash(kakaoMapMain, staticsData, trashMarkers);
                     setInfoWindowsTrash(initialInfoWindows);
+                    calc(staticsData);
                 }
             } catch (error) {
                 console.error("데이터를 가져오는 중 오류가 발생했습니다:", error);
             }
         }
-        initializeMap()
+        initializeMap();
     }, []);
 
     const addInfoWindowsForTrash = (mapInstance, staticsData, markersData) => {
@@ -117,10 +136,8 @@ export function KakaoMapMain() {
             kakao.maps.event.addListener(newMarkers[index], 'mouseout', function () {
                 infoWindow.close();
             })
-
             return infoWindow;
         })
-
         return newInfoWindows;
     }
 
@@ -251,7 +268,5 @@ export function KakaoMapMain() {
     );
 }
 
-
 KakaoMapMain.displayName = "/src/widgets/map/kakao-map-main.jsx";
-
 export default KakaoMapMain;

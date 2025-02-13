@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {Typography,} from "@material-tailwind/react";
 import {StatisticsCard} from "@/widgets/cards";
 import {StatisticsChart} from "@/widgets/charts";
@@ -8,10 +8,17 @@ import {ClockIcon} from "@heroicons/react/24/solid";
 import {KakaoMapMain} from "@/widgets/map";
 
 export function Home() {
+    const [exportWasteValue, setExportWasteValue] = useState(0);
+
+    const updatedStatisticsCardsData = statisticsCardsData.map(card => ({
+        ...card,
+        value: card.title === "연간 쓰레기 발생량" ? exportWasteValue.toLocaleString() + " Ton" : card.value,
+    }));
+
     return (
         <div className="mt-12">
             <div className="mb-12 grid gap-y-10 gap-x-6 md:grid-cols-2 xl:grid-cols-4">
-                {statisticsCardsData.map(({icon, title, footer, ...rest}) => (
+                {updatedStatisticsCardsData.map(({icon, title, footer, ...rest}) => (
                     <StatisticsCard
                         key={title}
                         {...rest}
@@ -51,10 +58,7 @@ export function Home() {
                     />
                 ))}
             </div>
-
-            <div className="mb-6">
-            </div>
-            <KakaoMapMain/>
+            <KakaoMapMain setExportWasteValue={setExportWasteValue}/>
         </div>
     );
 }
