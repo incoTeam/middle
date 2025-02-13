@@ -12,19 +12,19 @@ export const routes = [
         pages: [
             {
                 icon: <HomeIcon {...icon} />,
-                name: "dashboard",
+                name: "메인 페이지",
                 path: "/home",
                 element: <Home/>,
             },
             {
                 icon: <TableCellsIcon {...icon} />,
-                name: "GarbageView",
+                name: "생활폐기물 데이터 상세",
                 path: "/GarbageView",
                 element: <GarbageView/>,
             },
             {
                 icon: <TableCellsIcon {...icon} />,
-                name: "MapDetailView",
+                name: "전국 쓰레기 배출량 상세",
                 path: "/MapDetailView",
                 element: <MapDetail/>,
             },

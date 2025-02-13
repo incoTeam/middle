@@ -4,9 +4,9 @@ import chartDataOutput from "@/data/statistics-charts-data.jsx";
 export const statisticsCardsData =  [
     {
         color: "gray",
-        icon: BanknotesIcon,
+        icon: ChartBarIcon,
         title: "오늘의 소각량",
-        value: chartDataOutput.todayGarbage + "Ton",
+        value: chartDataOutput.todayGarbage + "톤",
         footer: {
             color: "text-black",
             label: chartDataOutput.descriptionMessage,

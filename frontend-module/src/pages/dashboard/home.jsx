@@ -12,7 +12,7 @@ export function Home() {
 
     const updatedStatisticsCardsData = statisticsCardsData.map(card => ({
         ...card,
-        value: card.title === "연간 쓰레기 발생량" ? exportWasteValue.toLocaleString() + " Ton" : card.value,
+        value: card.title === "연간 쓰레기 발생량" ? exportWasteValue.toLocaleString() + " 톤" : card.value,
     }));
 
     return (

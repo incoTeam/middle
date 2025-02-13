@@ -68,9 +68,9 @@ const chartMessage = (culumName, text) => {
 
 
     if (culumName[culumName.length - 1] > culumName[culumName.length - 2]) {
-        message = `${text}보다 소각량이 ${difference}Ton 증가 하였습니다.`;
+        message = `${text}보다 소각량이 ${difference}톤 증가 하였습니다.`;
     } else {
-        message = `${text}보다 소각량이 ${difference}Ton 감소 하였습니다.`;
+        message = `${text}보다 소각량이 ${difference}톤 감소 하였습니다.`;
     }
 
     return message;
