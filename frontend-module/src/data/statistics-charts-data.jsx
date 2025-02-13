@@ -108,7 +108,7 @@ const dailySalesChart = {
     height: 400,
     series: [
         {
-            name: "TON",
+            name: "톤",
             data: updatedCOL5Items,
         },
     ],
@@ -133,7 +133,7 @@ const completedTaskChart = {
     height: 400,
     series: [
         {
-            name: "TON",
+            name: "톤",
             data: [50, 40, 300, 320, 500, 350, 200, 230, 500],
         },
     ],
@@ -156,12 +156,12 @@ const completedTasksChart = {
     ...completedTaskChart,
     series: [
         {
-            name: "TON",
+            name: "kg",
             data: refuseWeightValue,
         },
     ],
 };
-const descriptionMessage = chartMessage(updatedCOL5Items, "어제", "Ton");
+const descriptionMessage = chartMessage(updatedCOL5Items, "어제", "톤");
 export const statisticsChartsData = [
     // {
     //     color: "white",
