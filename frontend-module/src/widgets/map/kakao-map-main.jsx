@@ -237,7 +237,7 @@ export const KakaoMapMain = ({ setExportWasteValue }) => {
                             </Tabs>
                         </div>
                     </CardHeader>
-                    <CardBody>
+                    <CardBody className="pt-0">
                         <div
                             id="kakaoMapMain"
                             style={{

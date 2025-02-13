@@ -1,7 +1,7 @@
 export const chartsConfig = {
   chart: {
     toolbar: {
-      show: false,
+      show: true,
     },
   },
   title: {
@@ -23,16 +23,21 @@ export const chartsConfig = {
         fontSize: "13px",
         fontFamily: "inherit",
         fontWeight: 300,
+
       },
     },
   },
   yaxis: {
     labels: {
+
       style: {
         colors: "#37474f",
         fontSize: "13px",
         fontFamily: "inherit",
         fontWeight: 300,
+      },
+      formatter: function (value) {
+        return `${value.toLocaleString()} kg`; // Y축 값에 "톤"을 추가
       },
     },
   },
@@ -55,6 +60,11 @@ export const chartsConfig = {
   },
   tooltip: {
     theme: "dark",
+    y: {
+      formatter: function (value) {
+        return `${value}`;
+      },
+    },
   },
 };
 

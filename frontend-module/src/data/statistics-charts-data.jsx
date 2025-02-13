@@ -125,6 +125,23 @@ const dailySalesChart = {
             ...chartsConfig.xaxis,
             categories: updatedCOL1Items,
         },
+        yaxis: {
+            ...chartsConfig.yaxis,
+            labels: {
+                ...chartsConfig.yaxis.labels,
+                formatter: function (value) {
+                    return `${value} 톤`; // Y축 값에 "톤"을 추가
+                },
+            },
+        },
+        tooltip: {
+            ...chartsConfig.tooltip,
+            y: {
+                formatter: function (value) {
+                    return `${value}`; // 툴팁 값에 "톤" 추가
+                },
+            },
+        },
     },
 };
 

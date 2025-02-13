@@ -16,7 +16,7 @@ export const statisticsCardsData =  [
     {
         color: "gray",
         icon: ChartBarIcon,
-        title: "대전 내 RFID 음식물 쓰레기장 개수",
+        title: "대전광역시 내 RFID 음식물 쓰레기장 위치",
         value: Object.keys(foodWastePositionData).length + " 곳",
         footer: {
             color: "text-black",

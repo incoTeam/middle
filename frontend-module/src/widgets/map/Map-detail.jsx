@@ -69,12 +69,14 @@ export function MapDetail() {
     };
 
     return (
-        <div className="mt-12 mb-8 flex flex-col gap-12 ">
+        <div className="mt-12 mb-96 mr-5 ml-5 flex flex-col gap-12">
             <Card>
                 <CardHeader variant="gradient" color="gray" className="mb-8 p-6">
                     <Typography variant="h6" color="white">
                         쓰레기 배출량 상세보기 페이지
                     </Typography>
+                </CardHeader>
+                <CardBody className="pt-0">
                     <Tabs value={year}>
                         <TabsHeader>
                             <Tab value="2020" onClick={changeTable}>
@@ -88,9 +90,7 @@ export function MapDetail() {
                             </Tab>
                         </TabsHeader>
                     </Tabs>
-                </CardHeader>
-                <CardBody>
-                    <table className="w-full min-w-[640px] table-fixed">
+                    <table className="w-full min-w-[640px] table-fixed ">
                         <thead className="bg-gray-300">
                         {renderTableHeader()}
                         </thead>
