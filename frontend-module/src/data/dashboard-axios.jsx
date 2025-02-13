@@ -13,11 +13,11 @@ const formattedDate = `${year}${month}${day}`; //현재날짜 250211 형식으�
 
 // 2개월 전 날짜 계산
 const threeMonthsAgo = new Date();
-threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
+threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 1);
 
 // 2개월 전 날짜 포맷 (20240101 형식)
 const yearAgo = threeMonthsAgo.getFullYear();
-const monthAgo = String(threeMonthsAgo.getMonth() + 2).padStart(2, '0');
+const monthAgo = String(threeMonthsAgo.getMonth() + 1).padStart(2, '0');
 const dayAgo = String(threeMonthsAgo.getDate()).padStart(2, '0');
 const formattedDateAgo = `${yearAgo}${monthAgo}${dayAgo}`;
 

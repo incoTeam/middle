@@ -62,15 +62,15 @@ const updatedCOL1Items = extractColumnValues(items, 'COL1');
 //오늘의 소각량
 
 const todayGarbage = updatedCOL5Items[updatedCOL5Items.length - 1];
-const chartMessage = (culumName, text) => {
+const chartMessage = (culumName, text, text2) => {
     let message = "";
     const difference = Math.abs(culumName[culumName.length - 1] - culumName[culumName.length - 2]).toFixed(2); // 차이를 소수점 둘째 자리까지만 표시
 
 
     if (culumName[culumName.length - 1] > culumName[culumName.length - 2]) {
-        message = `${text}보다 소각량이 ${difference}톤 증가 하였습니다.`;
+        message = `${text}보다 소각량이 ${difference}${text2} 증가 하였습니다.`;
     } else {
-        message = `${text}보다 소각량이 ${difference}톤 감소 하였습니다.`;
+        message = `${text}보다 소각량이 ${difference}${text2} 감소 하였습니다.`;
     }
 
     return message;
@@ -105,7 +105,7 @@ const websiteViewsChart = {
 
 const dailySalesChart = {
     type: "bar",
-    height: 280,
+    height: 400,
     series: [
         {
             name: "TON",
@@ -130,10 +130,10 @@ const dailySalesChart = {
 
 const completedTaskChart = {
     type: "line",
-    height: 280,
+    height: 400,
     series: [
         {
-            name: "Sales",
+            name: "TON",
             data: [50, 40, 300, 320, 500, 350, 200, 230, 500],
         },
     ],
@@ -156,12 +156,12 @@ const completedTasksChart = {
     ...completedTaskChart,
     series: [
         {
-            name: "Tasks",
+            name: "TON",
             data: refuseWeightValue,
         },
     ],
 };
-const descriptionMessage = chartMessage(updatedCOL5Items, "어제");
+const descriptionMessage = chartMessage(updatedCOL5Items, "어제", "Ton");
 export const statisticsChartsData = [
     // {
     //     color: "white",
@@ -172,15 +172,15 @@ export const statisticsChartsData = [
     // },
     {
         color: "white",
-        title: "일일 쓰레기 소각량",
+        title: "대전광역시 일일 쓰레기 소각량",
         description: descriptionMessage,
         footer: "from. 대전 도시공사",
         chart: dailySalesChart,
     },
     {
         color: "white",
-        title: "생활 폐기물 월별 처리량(소각 + 매립)",
-        description: chartMessage(refuseWeightValue, "지난달"),
+        title: "대전광역시 생활 폐기물 월별 처리량(소각 + 매립)",
+        description: chartMessage(refuseWeightValue, "지난달", "kg"),
         footer: "2Year Ago",
         chart: completedTasksChart,
     },
