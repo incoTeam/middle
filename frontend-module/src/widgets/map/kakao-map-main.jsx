@@ -5,7 +5,6 @@ import trashPosition from "./trash-position.json";
 import {getWasteStatisticsData} from "@/data/index.js";
 
 import {Card, CardBody, CardFooter, CardHeader, Tab, Tabs, TabsHeader, Typography} from "@material-tailwind/react";
-import {ClockIcon} from "@heroicons/react/24/solid/index.js";
 
 export const KakaoMapMain = ({ setExportWasteValue }) => {
 
@@ -29,7 +28,6 @@ export const KakaoMapMain = ({ setExportWasteValue }) => {
             setExportWasteValue(calculatedData);
         }
     };
-
     const calculateStatisticsData = (wasteStaticsData) => {
         if (!wasteStaticsData || wasteStaticsData.length === 0) return { sumWsteQty: 0 };
 
@@ -222,49 +220,48 @@ export const KakaoMapMain = ({ setExportWasteValue }) => {
             map.setLevel(6);
         }
     };
-
-    return (
-        <div className="mb-4 grid grid-cols-1 gap-6 xl:grid-cols-3">
-            <Card className="overflow-hidden xl:col-span-3 border border-blue-gra-100 shadow-sm">
-                <CardHeader floated={false} shadow={false} color="transparent" className="mt-4 mb-1 flex ml-auto">
-                    <div className="w-96">
-                        <Tabs value="trashAmtTab">
-                            <TabsHeader>
-                                <Tab value="trashAmtTab" onClick={changeMap}>
-                                    연간 쓰레기 배출량
-                                </Tab>
-                                <Tab value="foodWasteTab" onClick={changeMap}>
-                                    음식물 쓰레기장 위치
-                                </Tab>
-                            </TabsHeader>
-                        </Tabs>
-                    </div>
-                </CardHeader>
-                <CardBody>
-                    <div
-                        id="kakaoMapMain"
-                        style={{
-                            width: "100%",
-                            height: "700px",
-                        }}
-                    ></div>
-                </CardBody>
-                <CardFooter>
-                    <Typography
-                        variant="small"
-                        className="flex items-center font-normal text-blue-gray-600"
-                    >
-                        <ClockIcon strokeWidth={2} className="h-4 w-4 text-blue-gray-400"/>
-                        &nbsp;
-                        From 2022
-                        <a href="/dashboard/MapDetailView" className="text-blue-500 hover:underline ml-auto">
-                            상세 페이지로 이동
-                        </a>
-                    </Typography>
-                </CardFooter>
-            </Card>
-        </div>
-    );
+        return (
+            <div className="mb-4 grid grid-cols-1 gap-6 xl:grid-cols-3">
+                <Card className="overflow-hidden xl:col-span-3 border border-blue-gra-100 shadow-sm">
+                    <CardHeader floated={false} shadow={false} color="transparent" className="mt-4 mb-1">
+                        <div className="w-full h-1/4">
+                            <Tabs value="trashAmtTab">
+                                <TabsHeader>
+                                    <Tab value="trashAmtTab" onClick={changeMap}>
+                                        5개 시도 연간 쓰레기 배출량
+                                    </Tab>
+                                    <Tab value="foodWasteTab" onClick={changeMap}>
+                                        대전광역시 내 RFID 기반 음식물 쓰레기장 위치
+                                    </Tab>
+                                </TabsHeader>
+                            </Tabs>
+                        </div>
+                    </CardHeader>
+                    <CardBody>
+                        <div
+                            id="kakaoMapMain"
+                            style={{
+                                width: "100%",
+                                height: "700px",
+                            }}
+                        ></div>
+                    </CardBody>
+                    <CardFooter className="pt-0">
+                        <Typography
+                            variant="small"
+                            className="flex items-center font-normal text-blue-gray-600"
+                        >
+                            자원순환마루 제공(연간 쓰레기 배출량)
+                            <br/>
+                            음식물 쓰레기 관리시스템 제공(RFID 기반 음식물 쓰레기장 위치)
+                            <a href="/dashboard/MapDetailView" className="text-blue-500 hover:underline ml-auto">
+                                상세 페이지로 이동
+                            </a>
+                        </Typography>
+                    </CardFooter>
+                </Card>
+            </div>
+        );
 }
 
 KakaoMapMain.displayName = "/src/widgets/map/kakao-map-main.jsx";
