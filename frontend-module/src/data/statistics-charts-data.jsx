@@ -64,7 +64,7 @@ const updatedCOL1Items = extractColumnValues(items, 'COL1');
 const todayGarbage = updatedCOL5Items[updatedCOL5Items.length - 1];
 const chartMessage = (culumName, text, text2) => {
     let message = "";
-    const difference = Math.abs(culumName[culumName.length - 1] - culumName[culumName.length - 2]).toFixed(2); // 차이를 소수점 둘째 자리까지만 표시
+    const difference = Number(Math.abs(culumName[culumName.length - 1] - culumName[culumName.length - 2]).toFixed(2)).toLocaleString(); // 차이를 소수점 둘째 자리까지만 표시
 
 
     if (culumName[culumName.length - 1] > culumName[culumName.length - 2]) {
@@ -191,14 +191,14 @@ export const statisticsChartsData = [
         color: "white",
         title: "대전광역시 일일 쓰레기 소각량",
         description: descriptionMessage,
-        footer: "from. 대전 도시공사",
+        footer: "대전 도시공사 소각장 월별 쓰레기 반입 및 소각량 현황 API",
         chart: dailySalesChart,
     },
     {
         color: "white",
         title: "대전광역시 생활 폐기물 월별 처리량(소각 + 매립)",
         description: chartMessage(refuseWeightValue, "지난달", "kg"),
-        footer: "2Year Ago",
+        footer: "대전 도시공사 생활폐기물반입정보 API",
         chart: completedTasksChart,
     },
 ];
